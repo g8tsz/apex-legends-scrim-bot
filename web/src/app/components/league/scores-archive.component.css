@@ -1,0 +1,13 @@
+/* Scores Archive Container */
+.scores-archive-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .scores-archive-container {
+    padding: 1rem 0.5rem;
+  }
+}

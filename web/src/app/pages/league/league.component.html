@@ -1,0 +1,17 @@
+<div class="league-container">
+  <!-- League Header -->
+  <app-league-header
+    [currentSeason]="currentSeason"
+    [currentWeek]="currentWeek"
+    [totalWeeks]="totalWeeks"
+    [finalsDate]="finalsDate"
+    [progressPercentage]="getProgressPercentage()"
+    [weeksRemaining]="getWeeksRemaining()">
+  </app-league-header>
+
+  <!-- Divisions Grid -->
+  <app-divisions-grid
+    [divisions]="divisions"
+    [totalWeeks]="totalWeeks">
+  </app-divisions-grid>
+</div>

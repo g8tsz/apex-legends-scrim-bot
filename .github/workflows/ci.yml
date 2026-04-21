@@ -1,0 +1,64 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  web:
+    name: Web (Angular)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: web
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+      - run: npm ci
+      - run: npm run build
+
+  bot:
+    name: Bot (Discord / TypeScript)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: bot
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: bot/package-lock.json
+      - run: npm ci
+      # The bot imports config.json at compile time, so create a dummy one
+      # with the shape required for type-checking. Tokens are never used in CI.
+      - run: |
+          cat > config.json <<'EOF'
+          { "token": "ci-dummy", "clientId": "ci", "guildId": "ci" }
+          EOF
+      - run: npm run build
+      - run: npm test
+
+  matchmaker:
+    name: Matchmaker (Go)
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: matchmaker
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: "1.22"
+          cache: true
+          cache-dependency-path: matchmaker/go.sum
+      - run: go mod tidy
+      - run: go build ./...
+      - run: go test ./...

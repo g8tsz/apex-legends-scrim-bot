@@ -1,0 +1,28 @@
+{
+  "name": "nexus-scrims",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Nexus Scrims — Apex Legends scrim platform (web + matchmaker + Discord bot)",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "workspaces": [
+    "web",
+    "bot"
+  ],
+  "scripts": {
+    "install:all": "npm install --workspaces --include-workspace-root && cd matchmaker && go mod tidy",
+    "build:web": "npm --workspace web run build",
+    "build:bot": "npm --workspace bot run build",
+    "build:matchmaker": "cd matchmaker && go build ./...",
+    "build": "npm run build:web && npm run build:bot && npm run build:matchmaker",
+    "test:web": "npm --workspace web run test -- --watch=false --browsers=ChromeHeadless",
+    "test:bot": "npm --workspace bot run test",
+    "test:matchmaker": "cd matchmaker && go test ./...",
+    "test": "npm run test:web && npm run test:bot && npm run test:matchmaker",
+    "dev:web": "npm --workspace web run start",
+    "dev:bot": "npm --workspace bot run dev",
+    "dev:matchmaker": "cd matchmaker && go run ./cmd/server"
+  }
+}
